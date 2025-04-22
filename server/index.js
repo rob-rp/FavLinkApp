@@ -2,6 +2,7 @@
 
 const express = require('express') //importing the express function from the express lib
 const app = express() // we're setting a new variable called app to be an express app instance
+const path = require('path')
 
 const db = require('./queries')
 
@@ -13,12 +14,15 @@ const port = 8080 // defining the port we want our app to run on
 app.use(cors()) //add cors handling to our app
 app.use(express.json()) //Middleware to parse incoming json data from a client
 app.use(express.urlencoded()) //Middleware to parse incoming URL encoded data
-app.use(express.static('public')) //Middleware to turn a particular folder into a "STATIC FOLDER"
+// app.use(express.static('public')) //Middleware to turn a particular folder into a "STATIC FOLDER"
 
-//example route for the server
-// app.get("/", (req,res) => {  uncomment 4/3/25 1141pm
-//     res.send("Node / Express server is operational!")
-// })
+//__dirname is the current directory were in. the  below line will make our client BUILD folder public
+app.use(express.static(path.join(__dirname, '..client/out'))) 
+
+//use this to serve the file from the BUILD folder
+app.get("/", (req,res) => {
+    res.sendFile(path.join(__dirname, '../client/out', 'index.html'))
+})
 
 
 
